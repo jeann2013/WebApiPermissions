@@ -1,4 +1,4 @@
-﻿namespace WebApiPermissions.Domain;
+﻿namespace WebApiPermissions.Domain.Entities;
 
 public class PermissionType
 {

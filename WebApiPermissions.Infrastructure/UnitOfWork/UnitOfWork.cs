@@ -1,21 +1,24 @@
-﻿using WebApiPermissions.Domain;
+﻿using WebApiPermissions.Domain.Entities;
+using WebApiPermissions.Infrastructure.Data;
 using WebApiPermissions.Infrastructure.Repositories;
 
-namespace WebApiPermissions.Infrastructure.UnitOfWork;
-
-public class UnitOfWork : IUnitOfWork
+namespace WebApiPermissions.Infrastructure.UnitOfWork
 {
-    public IRepository<Permission> Permissions => throw new NotImplementedException();
-
-    public IRepository<PermissionType> PermissionTypes => throw new NotImplementedException();
-
-    public void Dispose()
+    public class UnitOfWork : IUnitOfWork
     {
-        throw new NotImplementedException();
-    }
+        private readonly ApplicationDbContext _context;
+        private Repository<Permission> _permissions;
+        private Repository<PermissionType> _permissionTypes;
 
-    public Task SaveChangesAsync()
-    {
-        throw new NotImplementedException();
+        public UnitOfWork(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public IRepository<Permission> Permissions => _permissions ??= new Repository<Permission>(_context);
+        public IRepository<PermissionType> PermissionTypes => _permissionTypes ??= new Repository<PermissionType>(_context);
+
+        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+        public void Dispose() => _context.Dispose();
     }
 }

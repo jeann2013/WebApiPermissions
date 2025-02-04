@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApiPermissions.Domain;
+using WebApiPermissions.Domain.Entities;
 
-namespace WebApiPermissions.Infrastructure;
+namespace WebApiPermissions.Infrastructure.Data;
 
 public class ApplicationDbContext : DbContext
 {
@@ -12,6 +12,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Relacion entre Permission y PermissionType
         modelBuilder.Entity<Permission>()
             .HasOne(p => p.TipoPermiso)
             .WithMany()

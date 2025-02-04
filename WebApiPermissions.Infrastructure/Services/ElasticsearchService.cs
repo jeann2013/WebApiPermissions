@@ -1,5 +1,5 @@
 ﻿using Elastic.Clients.Elasticsearch;
-using WebApiPermissions.Domain;
+using WebApiPermissions.Domain.Entities;
 
 namespace WebApiPermissions.Infrastructure.Services;
 

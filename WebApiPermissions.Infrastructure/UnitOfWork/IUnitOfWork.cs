@@ -1,4 +1,4 @@
-﻿using WebApiPermissions.Domain; // Asegúrate de que las entidades están en este namespace
+﻿using WebApiPermissions.Domain.Entities;
 using WebApiPermissions.Infrastructure.Repositories;
 
 namespace WebApiPermissions.Infrastructure.UnitOfWork;

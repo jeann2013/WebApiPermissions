@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebApiPermissions.Infrastructure.Data;
 
 namespace WebApiPermissions.Infrastructure.Repositories;
 
