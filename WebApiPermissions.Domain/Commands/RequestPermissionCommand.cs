@@ -1,9 +1,5 @@
-﻿namespace WebApiPermissions.Domain.Commands;
+﻿using MediatR;
 
-public class RequestPermissionCommand
-{
-    public required string NombreEmpleado { get; set; }
-    public required string ApellidoEmpleado { get; set; }
-    public required int TipoPermisoId { get; set; }
-    public required DateTime FechaPermiso { get; set; }
-}
+namespace WebApiPermissions.Application.Commands;
+public record RequestPermissionCommand(int Id, string NombreEmpleado,
+    string ApellidoEmpleado, int TipoPermisoId, DateTime FechaPermiso) : IRequest<int>;
