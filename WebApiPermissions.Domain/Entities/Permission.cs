@@ -8,7 +8,7 @@ public class Permission
     public required int TipoPermisoId { get; set; }
     public required DateTime FechaPermiso { get; set; }
 
-    public required virtual PermissionType TipoPermiso { get; set; }
+    public virtual PermissionType TipoPermiso { get; set; }
 }
 
 

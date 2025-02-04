@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApiPermissions.Application.Commands;
 using WebApiPermissions.Application.Queries;
-using WebApiPermissions.Domain.Commands;
 using WebApiPermissions.Domain.Entities;
 
 [ApiController]

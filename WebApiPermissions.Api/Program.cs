@@ -1,19 +1,20 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using WebApiPermissions.Application.Handlers;
 using WebApiPermissions.Application.Queries;
 using WebApiPermissions.Infrastructure.Data;
 using WebApiPermissions.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Habilitar CORS
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173") // URL del frontend con Vite
+            policy.WithOrigins("http://localhost:5173") 
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
@@ -37,6 +38,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetPermissionsHandler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RequestPermissionHandler).Assembly));
+
 
 
 var app = builder.Build();
