@@ -7,6 +7,18 @@ using WebApiPermissions.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Habilitar CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173") // URL del frontend con Vite
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 // Configurar SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -30,6 +42,10 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetPe
 var app = builder.Build();
 
 app.UseAuthentication();
+
+// Usar CORS
+app.UseCors("AllowReactApp");
+
 app.UseAuthorization();
 
 app.MapControllers();
