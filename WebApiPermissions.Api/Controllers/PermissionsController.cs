@@ -5,6 +5,7 @@ using WebApiPermissions.Application.Commands;
 using WebApiPermissions.Application.Queries;
 using WebApiPermissions.Domain.Entities;
 using WebApiPermissions.Infrastructure.Services;
+using WebApiPermissions.Infrastructure.UnitOfWork;
 
 [ApiController]
 [Route("api/permissions")]
@@ -13,15 +14,18 @@ public class PermissionsController : ControllerBase
     private readonly IMediator _mediator;
     private readonly ElasticsearchService _elasticsearchService;
     private readonly ElasticsearchClient _elasticClient;
+    private readonly IUnitOfWork _unitOfWork;
 
     public PermissionsController(
          ElasticsearchService elasticsearchService,
          ElasticsearchClient elasticClient,
+         IUnitOfWork unitOfWork,
         IMediator mediator)
     {
         _elasticsearchService = elasticsearchService;
         _mediator = mediator;
         _elasticClient = elasticClient;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpPost]
@@ -67,5 +71,27 @@ public class PermissionsController : ControllerBase
         }
 
         return Ok(response.Documents);
+    }
+
+    [HttpPost("sync-to-elasticsearch")]
+    public async Task<IActionResult> SyncPermissionsToElasticsearch()
+    {
+        var permissions = await _unitOfWork.Permissions.GetAllAsync();
+
+        if (permissions == null || permissions.Count() == 0)
+        {
+            return NotFound("No hay permisos en SQL Server para indexar en Elasticsearch.");
+        }
+
+        Console.WriteLine($"Intentando indexar {permissions.Count()} permisos...");
+
+        foreach (var permission in permissions)
+        {
+            Console.WriteLine($"ID: {permission.Id}, Nombre: {permission.NombreEmpleado}, Fecha: {permission.FechaPermiso}");
+        }
+
+        await _elasticsearchService.BulkIndexPermissionsAsync(permissions.ToList());
+
+        return Ok("Permisos sincronizados con Elasticsearch.");
     }
 }

@@ -1,12 +1,24 @@
-﻿using MediatR;
+﻿using Elastic.Clients.Elasticsearch;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using WebApiPermissions.Application.Handlers;
 using WebApiPermissions.Application.Queries;
 using WebApiPermissions.Infrastructure.Data;
+using WebApiPermissions.Infrastructure.Services;
 using WebApiPermissions.Infrastructure.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurar ElasticsearchClient
+var elasticSettings = new ElasticsearchClientSettings(new Uri("http://localhost:9200"));
+var elasticClient = new ElasticsearchClient(elasticSettings);
+
+//Registrar ElasticsearchClient como singleton
+builder.Services.AddSingleton(elasticClient);
+
+// Registrar ElasticsearchService como singleton
+builder.Services.AddSingleton<ElasticsearchService>();
 
 
 builder.Services.AddCors(options =>
